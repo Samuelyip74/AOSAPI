@@ -28,10 +28,26 @@ ov = OVNodeAPI.OVConnection(
 #     )
 
 status, data = ov.login()
-print(status, data)
+#print(status, data)
 
-#https://manage.ovcirrus.com/api/ov/v1/organizations
-status, data = ov.APIRequest('api/ov/v2/user/profile')
+# status, data = ov.getUserProfile()
+
+# data = {
+#   "firstname": "Samuel",
+#   "lastname": "Yip",
+#   "country": "Singapore",
+#   "verified": True,
+#   "companyName": "Alcatel Enterprise Pte Ltd",
+#   "email": "samuel.yip@al-enterprise.com",
+#   "closestRegion": "EMEA",
+
+
+# }
+
+# status, data = ov.updateUserProfile(data=data)
+status, data = ov.getUserMSPPermissionLvl(mspId='63295f10600b9a85f007e6fe')
+
+
 print(status, data)
 
 

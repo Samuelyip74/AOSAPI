@@ -50,32 +50,116 @@ class OVConnection(object):
         except:
             return 500, None
 
-    def APIRequest(self, endpoint):
+
+    def getUserProfile(self):
+        # login endpoint https://{hostaddress}/api/ov/v1/user/profile
+        endpoint = '/api/ov/v1/user/profile'
+
         header = { 
             'Content-Type' :  'application/json; charset=utf-8',
             'Authorization' : self.token_type + ' ' + self.token
             }
 
         try:
-            req = requests.post(self.endpoint() + endpoint, headers=header, verify=False)    
-            if req.status_code == 200:
-                return req.status_code, req.json()
-                
-            if req.status_code == 404:
-                return req.status_code, None     
+            req = requests.get(self.endpoint() + endpoint, headers=header, verify=False)    
+            if req.status_code in [200, 401, 500]:
+                return req.status_code, req.json()                              
+
+            else:
+                return req.status_code, None 
+        except:
+            return 500, None           
+
+    def updateUserProfile(self, data):
+        # login endpoint https://{hostaddress}/api/ov/v1/user/profile
+        endpoint = '/api/ov/v1/user/profile'
+
+        header = { 
+            'Content-Type' :  'application/json; charset=utf-8',
+            'Authorization' : self.token_type + ' ' + self.token
+            }
+
+        try:
+            req = requests.put(self.endpoint() + endpoint, headers=header, json=data, verify=False)    
+            if req.status_code in [200, 400, 401, 406, 500]:
+                return req.status_code, req.json()                              
+            else:
+                return req.status_code, None 
+        except:
+            return 500, None            
+
+    def getUserMSPPermissionLvl(self, mspId):
+        endpoint = '/api/ov/v1/msps/' + mspId + '/permissions'
+
+        header = { 
+            'Content-Type' :  'application/json; charset=utf-8',
+            'Authorization' : self.token_type + ' ' + self.token
+            }
+
+        try:
+            req = requests.get(self.endpoint() + endpoint, headers=header, verify=False)    
+            if req.status_code in [200, 401, 500]:
+                return req.status_code, req.json()                              
+
+            else:
+                return req.status_code, None 
+        except:
+            return 500, None          
+            
+    def getUserOrganizationPermission(self):
+        endpoint = '/api/ov/v1/organizations/permissions'
+
+        header = { 
+            'Content-Type' :  'application/json; charset=utf-8',
+            'Authorization' : self.token_type + ' ' + self.token
+            }
+
+        try:
+            req = requests.get(self.endpoint() + endpoint, headers=header, verify=False)    
+            if req.status_code in [200, 401, 500]:
+                return req.status_code, req.json()                              
 
             else:
                 return req.status_code, None 
         except:
             return 500, None   
 
+    def getUserSitePermission(self):
+        endpoint = '/api/ov/v1/sites/permissions'
 
-    def getUserProfile(self):
-        # login endpoint https://{hostaddress}/api/ov/v1/user/profile
-        userProfile_endpoint = '/api/ov/v1/user/profile'
+        header = { 
+            'Content-Type' :  'application/json; charset=utf-8',
+            'Authorization' : self.token_type + ' ' + self.token
+            }
 
-        status, data = self.APIRequest(userProfile_endpoint)
-        return status, data
+        try:
+            req = requests.get(self.endpoint() + endpoint, headers=header, verify=False)    
+            if req.status_code in [200, 401, 500]:
+                return req.status_code, req.json()                              
+
+            else:
+                return req.status_code, None 
+        except:
+            return 500, None  
+
+    def getUserMSP(self):
+        endpoint = '/api/ov/v1/msps'
+
+        header = { 
+            'Content-Type' :  'application/json; charset=utf-8',
+            'Authorization' : self.token_type + ' ' + self.token
+            }
+
+        try:
+            req = requests.get(self.endpoint() + endpoint, headers=header, verify=False)    
+            if req.status_code in [200, 401, 500]:
+                return req.status_code, req.json()                              
+
+            else:
+                return req.status_code, None 
+        except:
+            return 500, None                                                         
+
 
 
 
