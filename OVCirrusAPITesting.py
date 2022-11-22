@@ -1,5 +1,5 @@
 import requests
-import OVNodeAPI
+import OVCirrusAPIConsumables
 from urllib3.exceptions import InsecureRequestWarning
 from urllib3 import disable_warnings
 
@@ -8,7 +8,7 @@ disable_warnings(InsecureRequestWarning)
 
 OVnodeURL = 'https://eu.manage.ovcirrus.com/api/ov/v1/applications/authenticate'
 
-ov = OVNodeAPI.OVConnection(
+ov = OVCirrusAPIConsumables.OVConnection(
     email='samuel.yip@al-enterprise.com',
     password='Ciscotac@123',
     hostaddress='eu.manage.ovcirrus.com',
