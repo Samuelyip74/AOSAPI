@@ -50,6 +50,7 @@ class OVConnection(object):
         except:
             return 500, None
 
+# User profile API
 
     def getUserProfile(self):
         # login endpoint https://{hostaddress}/api/ov/v1/user/profile
@@ -141,6 +142,9 @@ class OVConnection(object):
                 return req.status_code, None 
         except:
             return 500, None  
+
+
+# MSP API
 
     def getUserMSP(self):
         endpoint = '/api/ov/v1/msps'
@@ -269,7 +273,6 @@ class OVConnection(object):
                 return req.status_code, None 
         except:
             return 500, None                     
-
 
     def getOrganization(self, orgId):
         endpoint = '/api/ov/v1/organizations/' + orgId 
