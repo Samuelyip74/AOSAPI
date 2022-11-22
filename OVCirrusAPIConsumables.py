@@ -143,7 +143,6 @@ class OVConnection(object):
         except:
             return 500, None  
 
-
 # MSP API
 
     def getUserMSP(self):
