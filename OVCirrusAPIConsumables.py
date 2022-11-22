@@ -158,8 +158,137 @@ class OVConnection(object):
             else:
                 return req.status_code, None 
         except:
-            return 500, None                                                         
+            return 500, None   
 
+    def getMSP(self, mspId):
+        endpoint = '/api/ov/v1/msps/' + mspId
+
+        header = { 
+            'Content-Type' :  'application/json; charset=utf-8',
+            'Authorization' : self.token_type + ' ' + self.token
+            }
+
+        try:
+            req = requests.get(self.endpoint() + endpoint, headers=header, verify=False)    
+            if req.status_code in [200, 401, 403, 404, 500]:
+                return req.status_code, req.json()                              
+
+            else:
+                return req.status_code, None 
+        except:
+            return 500, None      
+            
+    def updateMSP(self, mspId, data):
+        endpoint = '/api/ov/v1/msps/' + mspId
+
+        header = { 
+            'Content-Type' :  'application/json; charset=utf-8',
+            'Authorization' : self.token_type + ' ' + self.token
+            }
+
+        try:
+            req = requests.put(self.endpoint() + endpoint, json=data, headers=header, verify=False)    
+            if req.status_code in [200, 400, 401, 403, 404, 406, 500]:
+                return req.status_code, req.json()                              
+
+            else:
+                return req.status_code, None 
+        except:
+            return 500, None          
+
+# Organization API
+
+    def createOrg(self, data):
+        endpoint = '/api/ov/v1/organizations'
+
+        header = { 
+            'Content-Type' :  'application/json; charset=utf-8',
+            'Authorization' : self.token_type + ' ' + self.token
+            }
+
+        try:
+            req = requests.post(self.endpoint() + endpoint, json=data, headers=header, verify=False)    
+            if req.status_code in [200, 201, 400, 401, 403, 404, 406, 500]:
+                return req.status_code, req.json()                              
+
+            else:
+                return req.status_code, None 
+        except:
+            return 500, None      
+
+    def listAllUserOrg(self):
+        endpoint = '/api/ov/v1/organizations'
+
+        header = { 
+            'Content-Type' :  'application/json; charset=utf-8',
+            'Authorization' : self.token_type + ' ' + self.token
+            }
+
+        try:
+            req = requests.get(self.endpoint() + endpoint, headers=header, verify=False)    
+            if req.status_code in [200, 401, 500]:
+                return req.status_code, req.json()                              
+
+            else:
+                return req.status_code, None 
+        except:
+            return 500, None                     
+
+    def listAllOrgOfMSP(self, mspId):
+        endpoint = '/api/ov/v1/msps/' + mspId + '/organizations'
+
+        header = { 
+            'Content-Type' :  'application/json; charset=utf-8',
+            'Authorization' : self.token_type + ' ' + self.token
+            }
+
+        try:
+            req = requests.get(self.endpoint() + endpoint, headers=header, verify=False)    
+            if req.status_code in [200, 401, 403, 404, 500]:
+                return req.status_code, req.json()                              
+
+            else:
+                return req.status_code, None 
+        except:
+            return 500, None                     
+
+    def listAllOrgOfMSPSummary(self, mspId):
+        endpoint = '/api/ov/v1/msps/' + mspId + '/organizations/summary'
+
+        header = { 
+            'Content-Type' :  'application/json; charset=utf-8',
+            'Authorization' : self.token_type + ' ' + self.token
+            }
+
+        try:
+            req = requests.get(self.endpoint() + endpoint, headers=header, verify=False)    
+            if req.status_code in [200, 401, 403, 404, 500]:
+                return req.status_code, req.json()                              
+
+            else:
+                return req.status_code, None 
+        except:
+            return 500, None                     
+
+
+    def getOrganization(self, orgId):
+        endpoint = '/api/ov/v1/organizations/' + orgId 
+
+        header = { 
+            'Content-Type' :  'application/json; charset=utf-8',
+            'Authorization' : self.token_type + ' ' + self.token
+            }
+
+        try:
+            req = requests.get(self.endpoint() + endpoint, headers=header, verify=False)    
+            if req.status_code in [200, 401, 403, 404, 500]:
+                return req.status_code, req.json()                              
+
+            else:
+                return req.status_code, None 
+        except:
+            return 500, None    
+               
 
 
 

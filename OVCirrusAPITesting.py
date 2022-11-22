@@ -33,7 +33,18 @@ status, data = ov.login()
 # }
 
 # status, data = ov.updateUserProfile(data=data)
-status, data = ov.getUserMSPPermissionLvl(mspId='63295f10600b9a85f007e6fe')
+
+# data = {
+#     "name": "Singapore LA",
+#     "mspId": "63295f10600b9a85f007e6fe",
+#     "countryCode": "SG",
+#     "timezone": "Asia/Singapore",
+#     "idleTimeout": 0
+# }
+# status, data = ov.createOrg(data=data)
+
+status, data = ov.getOrganization(orgId='63295f10600b9a059807e6ff')
+
 
 
 print(status, data)
