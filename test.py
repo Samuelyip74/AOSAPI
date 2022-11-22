@@ -27,9 +27,9 @@ switch = aosAPI.AOSConnection(
 # status, data = switch.getInterface(interface='1/1/10')
 # status, data = switch.getIntVlan(interface='1/1/1')
 # status, data = switch.getIntVlan()
-status, data = switch.getChassisTemperature()
+# status, data = switch.getChassisTemperature()
 
-print(data)
+# print(data)
 
 
 
