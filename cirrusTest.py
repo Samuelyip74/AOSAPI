@@ -43,7 +43,11 @@ status, data = ov.login()
 # }
 # status, data = ov.createOrg(data=data)
 
-status, data = ov.getOrganization(orgId='63295f10600b9a059807e6ff')
+data = {
+    'name' : 'Singapore ALE Pte Ltd'
+}
+
+status, data = ov.getUserMSP()
 
 
 
