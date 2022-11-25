@@ -1,5 +1,7 @@
 import random
 import string
+import datetime
+from datetime import timedelta
 import requests
 from urllib3.exceptions import InsecureRequestWarning
 from urllib3 import disable_warnings
@@ -43,12 +45,30 @@ class OVConnection(object):
         try:
             if req.status_code == 200:
                 data = req.json()
+                now = datetime.datetime.now()
                 self.token_type = data['token_type']
-                self.token = data['access_token']
-                self.expires_in = data['expires_in']
+                self.token = data['access_token'] 
+                self.expires_in = now + timedelta(seconds=data['expires_in'])
                 return req.status_code, data
         except:
             return 500, None
+
+    def getToken(self):
+        now = datetime.datetime.now()
+        if self.token is None:
+            status, data = self.login()
+            if status == 200:
+                return self.token
+            else:
+                return ""
+        elif self.expires_in < now  :
+            status, data = self.login()
+            if status == 200:
+                return self.token
+            else:
+                return ""
+        else:
+            return self.token
 
 # User profile API
 
@@ -58,7 +78,7 @@ class OVConnection(object):
 
         header = { 
             'Content-Type' :  'application/json; charset=utf-8',
-            'Authorization' : self.token_type + ' ' + self.token
+            'Authorization' : self.token_type + ' ' + self.getToken()
             }
 
         try:

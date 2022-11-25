@@ -47,9 +47,7 @@ data = {
     'name' : 'Singapore ALE Pte Ltd'
 }
 
-status, data = ov.getUserMSP()
-
-
+status, data = ov.getUserProfile()
 
 print(status, data)
 
