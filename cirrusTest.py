@@ -48,11 +48,6 @@ data = {
     'name' : 'Singapore ALE Pte Ltd'
 }
 
-# while True:
-#     status, data = ov.getUserProfile()
-#     print(data)
-#     time.sleep(500)
-
 status, data = ov.getUserProfile()    
 print(status, data)
 

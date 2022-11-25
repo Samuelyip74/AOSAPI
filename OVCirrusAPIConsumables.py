@@ -14,7 +14,7 @@ class OVConnection(object):
 
     def __init__(self,
             email, password, appId, appSecret, hostaddress, secure=True, 
-            useport=-1, debug=False):
+            useport=-1, debug=False, token= None, expires_in = None):
         self.email       = email
         self.password    = password
         self.appId       = appId
@@ -23,9 +23,8 @@ class OVConnection(object):
         self.secure      = secure
         self.useport     = useport
         self.debug       = debug
-        self.token       = None
-        self.expires_in  = None
-        self.token_type  = None
+        self.token       = token
+        self.expires_in  = expires_in
 
     def endpoint(self):
         #return "%s://%s/index.php?action=" % ("https" if self.secure == True else "http", self.hostaddress)
@@ -46,7 +45,6 @@ class OVConnection(object):
             if req.status_code == 200:
                 data = req.json()
                 now = datetime.datetime.now()
-                self.token_type = data['token_type']
                 self.token = data['access_token'] 
                 self.expires_in = now + timedelta(seconds=data['expires_in'])
                 return req.status_code, data
@@ -100,7 +98,7 @@ class OVConnection(object):
 
         header = { 
             'Content-Type' :  'application/json; charset=utf-8',
-            'Authorization' : self.token_type + ' ' + self.token
+            'Authorization' : 'Bearer ' + self.getToken()
             }
 
         try:
@@ -117,7 +115,7 @@ class OVConnection(object):
 
         header = { 
             'Content-Type' :  'application/json; charset=utf-8',
-            'Authorization' : self.token_type + ' ' + self.token
+            'Authorization' : 'Bearer ' + self.getToken()
             }
 
         try:
@@ -135,7 +133,7 @@ class OVConnection(object):
 
         header = { 
             'Content-Type' :  'application/json; charset=utf-8',
-            'Authorization' : self.token_type + ' ' + self.token
+            'Authorization' : 'Bearer ' + self.getToken()
             }
 
         try:
@@ -153,7 +151,7 @@ class OVConnection(object):
 
         header = { 
             'Content-Type' :  'application/json; charset=utf-8',
-            'Authorization' : self.token_type + ' ' + self.token
+            'Authorization' : 'Bearer ' + self.getToken()
             }
 
         try:
@@ -173,7 +171,7 @@ class OVConnection(object):
 
         header = { 
             'Content-Type' :  'application/json; charset=utf-8',
-            'Authorization' : self.token_type + ' ' + self.token
+            'Authorization' : 'Bearer ' + self.getToken()
             }
 
         try:
@@ -191,7 +189,7 @@ class OVConnection(object):
 
         header = { 
             'Content-Type' :  'application/json; charset=utf-8',
-            'Authorization' : self.token_type + ' ' + self.token
+            'Authorization' : 'Bearer ' + self.getToken()
             }
 
         try:
@@ -209,7 +207,7 @@ class OVConnection(object):
 
         header = { 
             'Content-Type' :  'application/json; charset=utf-8',
-            'Authorization' : self.token_type + ' ' + self.token
+            'Authorization' : 'Bearer ' + self.getToken()
             }
 
         try:
@@ -229,7 +227,7 @@ class OVConnection(object):
 
         header = { 
             'Content-Type' :  'application/json; charset=utf-8',
-            'Authorization' : self.token_type + ' ' + self.token
+            'Authorization' : 'Bearer ' + self.getToken()
             }
 
         try:
@@ -247,7 +245,7 @@ class OVConnection(object):
 
         header = { 
             'Content-Type' :  'application/json; charset=utf-8',
-            'Authorization' : self.token_type + ' ' + self.token
+            'Authorization' : 'Bearer ' + self.getToken()
             }
 
         try:
@@ -265,7 +263,7 @@ class OVConnection(object):
 
         header = { 
             'Content-Type' :  'application/json; charset=utf-8',
-            'Authorization' : self.token_type + ' ' + self.token
+            'Authorization' : 'Bearer ' + self.getToken()
             }
 
         try:
@@ -283,7 +281,7 @@ class OVConnection(object):
 
         header = { 
             'Content-Type' :  'application/json; charset=utf-8',
-            'Authorization' : self.token_type + ' ' + self.token
+            'Authorization' : 'Bearer ' + self.getToken()
             }
 
         try:
@@ -301,7 +299,7 @@ class OVConnection(object):
 
         header = { 
             'Content-Type' :  'application/json; charset=utf-8',
-            'Authorization' : self.token_type + ' ' + self.token
+            'Authorization' : 'Bearer ' + self.getToken()
             }
 
         try:
