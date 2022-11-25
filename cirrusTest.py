@@ -1,4 +1,5 @@
 import requests
+import time
 import OVCirrusAPIConsumables
 from urllib3.exceptions import InsecureRequestWarning
 from urllib3 import disable_warnings
@@ -15,7 +16,7 @@ ov = OVCirrusAPIConsumables.OVConnection(
     debug=True
     )
 
-status, data = ov.login()
+#status, data = ov.login()
 #print(status, data)
 
 # status, data = ov.getUserProfile()
@@ -47,8 +48,12 @@ data = {
     'name' : 'Singapore ALE Pte Ltd'
 }
 
-status, data = ov.getUserProfile()
+# while True:
+#     status, data = ov.getUserProfile()
+#     print(data)
+#     time.sleep(500)
 
+status, data = ov.getUserProfile()    
 print(status, data)
 
 

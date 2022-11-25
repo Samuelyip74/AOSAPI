@@ -55,20 +55,23 @@ class OVConnection(object):
 
     def getToken(self):
         now = datetime.datetime.now()
-        if self.token is None:
-            status, data = self.login()
-            if status == 200:
-                return self.token
+        try:
+            if self.token is None:
+                status, data = self.login()
+                if status == 200:
+                    return self.token
+                else:
+                    return ""
+            elif self.expires_in < now  :
+                status, data = self.login()
+                if status == 200:
+                    return self.token
+                else:
+                    return ""
             else:
-                return ""
-        elif self.expires_in < now  :
-            status, data = self.login()
-            if status == 200:
                 return self.token
-            else:
-                return ""
-        else:
-            return self.token
+        except:
+            return ""
 
 # User profile API
 
@@ -78,8 +81,8 @@ class OVConnection(object):
 
         header = { 
             'Content-Type' :  'application/json; charset=utf-8',
-            'Authorization' : self.token_type + ' ' + self.getToken()
-            }
+            'Authorization' : 'Bearer ' + self.getToken()
+            }  
 
         try:
             req = requests.get(self.endpoint() + endpoint, headers=header, verify=False)    
