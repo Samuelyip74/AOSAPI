@@ -361,6 +361,8 @@ class OVConnection(object):
         except:
             return 500, None    
 
+# Sites Management
+
     def createSite(self, orgId, data):      
         endpoint = '/api/ov/v1/organizations/' + orgId + '/sites'
 
