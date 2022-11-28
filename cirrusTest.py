@@ -52,7 +52,7 @@ data = {
 }
 
 
-status, data = ov.updateOrganization(orgId='63295f10600b9a059807e6ff', data=data)    
+status, data = ov.getAllUserInOrganization(orgId='63295f10600b9a059807e6ff')    
 
 print(status, data)
 
