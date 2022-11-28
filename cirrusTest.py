@@ -45,14 +45,22 @@ ov = OVCirrusAPIConsumables.OVConnection(
 # status, data = ov.createOrg(data=data)
 
 data = {
-"name": "Alcatel-Lucent Enterprise",
-"mspId" : "63295f10600b9a85f007e6fe",
-"countryCode": "SG",
-"timezone": "Asia/Singapore",
+    "name": "string",
+    "countryCode": "SG",
+    "timezone": "Asia/Singapore",
+    "address": "string",
+    "isDefault": True,
+    "location": {
+    "type": "string",
+    "coordinates": []
+    },
+    "zoom": 17,
+    "imageUrl": "string"
 }
 
 
-status, data = ov.getAllUserInOrganization(orgId='63295f10600b9a059807e6ff')    
+
+status, data = ov.deleteSite(orgId='63295f10600b9a059807e6ff', siteId='6384757086889ff890747a65')    
 
 print(status, data)
 

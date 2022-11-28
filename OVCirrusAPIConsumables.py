@@ -360,4 +360,76 @@ class OVConnection(object):
                 return req.status_code, None 
         except:
             return 500, None    
-               
+
+    def createSite(self, orgId, data):      
+        endpoint = '/api/ov/v1/organizations/' + orgId + '/sites'
+
+        header = { 
+            'Content-Type' :  'application/json; charset=utf-8',
+            'Authorization' : 'Bearer ' + self.getToken()
+            }
+
+        try:
+            req = requests.post(self.endpoint() + endpoint, json=data, headers=header, verify=False)    
+            if req.status_code in [200, 400, 401, 403, 404, 406, 500]:
+                return req.status_code, req.json()                              
+
+            else:
+                return req.status_code, None 
+        except:
+            return 500, None      
+
+    def getSites(self, orgId):      
+        endpoint = '/api/ov/v1/organizations/' + orgId + '/sites'
+
+        header = { 
+            'Content-Type' :  'application/json; charset=utf-8',
+            'Authorization' : 'Bearer ' + self.getToken()
+            }
+
+        try:
+            req = requests.get(self.endpoint() + endpoint, headers=header, verify=False)    
+            if req.status_code in [200, 400, 401, 403, 404, 406, 500]:
+                return req.status_code, req.json()                              
+
+            else:
+                return req.status_code, None 
+        except:
+            return 500, None                  
+
+    def updateSite(self, orgId, siteId, data):      
+        endpoint = '/api/ov/v1/organizations/' + orgId + '/sites/' + siteId
+
+        header = { 
+            'Content-Type' :  'application/json; charset=utf-8',
+            'Authorization' : 'Bearer ' + self.getToken()
+            }
+
+        try:
+            req = requests.put(self.endpoint() + endpoint, json=data, headers=header, verify=False)    
+            if req.status_code in [200, 400, 401, 403, 404, 406, 500]:
+                return req.status_code, req.json()                              
+
+            else:
+                return req.status_code, None 
+        except:
+            return 500, None                  
+
+    def deleteSite(self, orgId, siteId):      
+        endpoint = '/api/ov/v1/organizations/' + orgId + '/sites/' + siteId
+
+        header = { 
+            'Content-Type' :  'application/json; charset=utf-8',
+            'Authorization' : 'Bearer ' + self.getToken()
+            }
+
+        try:
+            req = requests.delete(self.endpoint() + endpoint, headers=header, verify=False)    
+            if req.status_code in [200, 400, 401, 403, 404, 406, 500]:
+                return req.status_code, req.json()                              
+
+            else:
+                return req.status_code, None 
+        except:
+            return 500, None                  
+
