@@ -48,7 +48,11 @@ data = {
     'name' : 'Singapore ALE Pte Ltd'
 }
 
+status, data = ov.getUserSitePermission()    
+print(status, data)
+
 status, data = ov.getUserProfile()    
+
 print(status, data)
 
 

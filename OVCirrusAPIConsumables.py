@@ -1,14 +1,9 @@
-import random
-import string
 import datetime
 from datetime import timedelta
 import requests
 from urllib3.exceptions import InsecureRequestWarning
 from urllib3 import disable_warnings
 disable_warnings(InsecureRequestWarning)
-
-import xmltodict, json
-
 
 class OVConnection(object):
 
