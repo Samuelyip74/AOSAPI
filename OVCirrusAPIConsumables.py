@@ -463,7 +463,6 @@ class OVConnection(object):
         except:
             return 500, None     
 
-
     def getGroups(self, orgId, siteId):      
         endpoint = '/api/ov/v1/organizations/' + orgId + '/sites/' + siteId + '/groups'
 
