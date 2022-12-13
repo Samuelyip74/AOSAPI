@@ -482,6 +482,23 @@ class OVConnection(object):
         except:
             return 500, None                  
 
+    def getGroupById(self, orgId, siteId, groupId):      
+        endpoint = '/api/ov/v1/organizations/' + orgId + '/sites/' + siteId + '/groups/' + groupId
+
+        header = { 
+            'Content-Type' :  'application/json; charset=utf-8',
+            'Authorization' : 'Bearer ' + self.getToken()
+            }
+
+        try:
+            req = requests.get(self.endpoint() + endpoint, headers=header, verify=False)    
+            if req.status_code in [200, 400, 401, 403, 404, 406, 500]:
+                return req.status_code, req.json()                              
+
+            else:
+                return req.status_code, None 
+        except:
+            return 500, None   
 
              
 
