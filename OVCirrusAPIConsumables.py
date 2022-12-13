@@ -500,6 +500,50 @@ class OVConnection(object):
         except:
             return 500, None   
 
-             
+    def updateGroup(self, orgId, siteId, groupId, name= "", description = "", provisioningTemplateName = "Default Provisioning Config"):      
+        endpoint = '/api/ov/v1/organizations/' + orgId + '/sites/' + siteId + '/groups/' + groupId
+
+        header = { 
+            'Content-Type' :  'application/json; charset=utf-8',
+            'Authorization' : 'Bearer ' + self.getToken()
+            }
+
+        payload = {
+            "name": name,
+            "description": description,
+            "provisioningTemplateName": provisioningTemplateName
+        }
+
+        try:
+            req = requests.put(self.endpoint() + endpoint, json=payload, headers=header, verify=False)    
+            if req.status_code in [200, 400, 401, 403, 404, 406, 500]:
+                return req.status_code, req.json()                              
+
+            else:
+                return req.status_code, None 
+        except:
+            return 500, None                
+
+    def deleteGroup(self, orgId, siteId, groupId, groupIDForDeviceMigration= ""):      
+        endpoint = '/api/ov/v1/organizations/' + orgId + '/sites/' + siteId + '/groups/' + groupId
+
+        header = { 
+            'Content-Type' :  'application/json; charset=utf-8',
+            'Authorization' : 'Bearer ' + self.getToken()
+            }
+
+        payload = {
+            "groupForDeviceMigration": groupIDForDeviceMigration,
+        }
+
+        try:
+            req = requests.delete(self.endpoint() + endpoint, json=payload, headers=header, verify=False)    
+            if req.status_code in [200, 400, 401, 403, 404, 406, 500]:
+                return req.status_code, req.json()                              
+
+            else:
+                return req.status_code, None 
+        except:
+            return 500, None                
 
 

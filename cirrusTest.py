@@ -23,9 +23,13 @@ siteId = "63295f10600b9a58b807e700"
 
 # print(status, data)
 
-status, data = ov.getGroupById(orgId, siteId, groupId="63981976bb1e3e5cd8e79383")
+groupId = "63981cca3f570561d2db2f3c"
 
-print(status, data)
+# status, data = ov.deleteGroup(orgId, siteId, groupId, groupForDeviceMigration="63295f10600b9a81f507e701")
+
+# status, data = ov.getGroups(orgId, siteId)
+
+# print(status, data)
 
 
 
