@@ -16,51 +16,14 @@ ov = OVCirrusAPIConsumables.OVConnection(
     debug=True
     )
 
-#status, data = ov.login()
-#print(status, data)
+orgId = "63295f10600b9a059807e6ff"
+siteId = "63295f10600b9a58b807e700"
 
-# status, data = ov.getUserProfile()
+# status, data = ov.getSites(orgId)
 
-# data = {
-#   "firstname": "Samuel",
-#   "lastname": "Yip",
-#   "country": "Singapore",
-#   "verified": True,
-#   "companyName": "Alcatel Enterprise Pte Ltd",
-#   "email": "samuel.yip@al-enterprise.com",
-#   "closestRegion": "EMEA",
+# print(status, data)
 
-
-# }
-
-# status, data = ov.updateUserProfile(data=data)
-
-# data = {
-#     "name": "Singapore LA",
-#     "mspId": "63295f10600b9a85f007e6fe",
-#     "countryCode": "SG",
-#     "timezone": "Asia/Singapore",
-#     "idleTimeout": 0
-# }
-# status, data = ov.createOrg(data=data)
-
-data = {
-    "name": "string",
-    "countryCode": "SG",
-    "timezone": "Asia/Singapore",
-    "address": "string",
-    "isDefault": True,
-    "location": {
-    "type": "string",
-    "coordinates": []
-    },
-    "zoom": 17,
-    "imageUrl": "string"
-}
-
-
-
-status, data = ov.deleteSite(orgId='63295f10600b9a059807e6ff', siteId='6384757086889ff890747a65')    
+status, data = ov.createGroup(orgId, siteId, group="ChaiChee")
 
 print(status, data)
 
