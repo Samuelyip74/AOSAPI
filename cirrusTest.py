@@ -23,9 +23,9 @@ siteId = "63295f10600b9a58b807e700"
 
 # print(status, data)
 
-status, data = ov.createGroup(orgId, siteId, group="ChaiChee")
+# status, data = ov.SearchGroup(orgId, siteId, keyword="")
 
-print(status, data)
+# print(status, data)
 
 
 

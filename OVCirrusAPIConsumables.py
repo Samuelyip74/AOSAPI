@@ -399,6 +399,8 @@ class OVConnection(object):
         except:
             return 500, None                  
 
+
+
     def updateSite(self, orgId, siteId, data):      
         endpoint = '/api/ov/v1/organizations/' + orgId + '/sites/' + siteId
 
@@ -460,3 +462,27 @@ class OVConnection(object):
                 return req.status_code, None 
         except:
             return 500, None     
+
+
+    def getGroups(self, orgId, siteId):      
+        endpoint = '/api/ov/v1/organizations/' + orgId + '/sites/' + siteId + '/groups'
+
+        header = { 
+            'Content-Type' :  'application/json; charset=utf-8',
+            'Authorization' : 'Bearer ' + self.getToken()
+            }
+
+        try:
+            req = requests.get(self.endpoint() + endpoint, headers=header, verify=False)    
+            if req.status_code in [200, 400, 401, 403, 404, 406, 500]:
+                return req.status_code, req.json()                              
+
+            else:
+                return req.status_code, None 
+        except:
+            return 500, None                  
+
+
+             
+
+
