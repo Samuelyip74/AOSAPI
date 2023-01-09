@@ -1,8 +1,18 @@
+
+# https://github.com/lukaskaplan/aruba-rtls
+
 import socket
 
  
+# local Server information
 
-localIP     = "127.0.0.1"
+hostname = socket.gethostname()
+IPAddr = socket.gethostbyname(hostname)
+ 
+print("Your Computer Name is:" + hostname)
+print("Your Computer IP Address is:" + IPAddr)
+
+localIP     = IPAddr
 
 localPort   = 20001
 

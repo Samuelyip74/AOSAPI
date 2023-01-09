@@ -1,12 +1,17 @@
-import socket
 
+import socket
+hostname = socket.gethostname()
+IPAddr = socket.gethostbyname(hostname)
+ 
+print("Your Computer Name is:" + hostname)
+print("Your Computer IP Address is:" + IPAddr)
  
 
 msgFromClient       = "Hello UDP Server"
 
 bytesToSend         = str.encode(msgFromClient)
 
-serverAddressPort   = ("127.0.0.1", 20001)
+serverAddressPort   = (IPAddr, 20001)
 
 bufferSize          = 1024
 
