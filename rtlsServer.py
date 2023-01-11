@@ -41,7 +41,6 @@ def rcv_explode(message):
     rtls.append(message[-20:])
     return rtls
 
-
 def parse_header(header):
     #
     # $header = 16 byte header in binary
@@ -80,17 +79,17 @@ def parse_stationreport(payload):
     # [9] = 4 byte - age, # of seconds since the last packet was heard from this station
     #
     field = []
-    field.append(payload[0:6])
-    field.append(payload[6:7])
-    field.append(payload[7:8])
-    field.append(payload[8:9])
-    field.append(payload[9:11])
-    field.append(payload[11:13])
-    field.append(payload[13:18])
-    field.append(payload[18:23])
-    field.append(payload[23:26])
+    field.append(payload[0:6]) 
+    field.append(payload[6:7]) 
+    field.append(payload[7:8]) 
+    field.append(payload[8:9]) 
+    field.append(payload[9:10]) 
+    field.append(payload[10:11]) 
+    field.append(payload[11:12]) 
+    field.append(payload[12:18]) 
+    field.append(payload[18:24]) 
+    field.append(payload[24:28]) 
     return field;    
-     
 
 def check_signature(message):
     return True
@@ -157,10 +156,12 @@ try:
             #
             if(message_type == "AR_COMPOUND_MESSAGE_REPORT"):
                 pass
-            
 
-            
-
+            if(message_type == "AR_STATION_REPORT"):
+                print ("Received AR_STATION_REPORT")
+                msg = parse_stationreport(message[1])
+                print ("Sent AR_STATION_REPORT")      
+        
             #clientMsg = "Message from Client:{}".format(message)
             #clientIP  = "Client IP Address:{}".format(APIPaddress)
             
@@ -169,7 +170,6 @@ try:
     else:
         # DO NOTHING
         pass
-
 
 except KeyboardInterrupt:
     print("KeyboardInterrupted")
