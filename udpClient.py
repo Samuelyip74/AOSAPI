@@ -7,11 +7,11 @@ print("Your Computer Name is:" + hostname)
 print("Your Computer IP Address is:" + IPAddr)
  
 
-msgFromClient       = "Hello UDP Server"
+msgFromClient       = bytes.fromhex('0015001002000010AABBCCDDEEFF0000111111111111111122222222222222AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA')
 
-bytesToSend         = str.encode(msgFromClient)
+bytesToSend         = msgFromClient
 
-serverAddressPort   = (IPAddr, 20001)
+serverAddressPort   = (IPAddr, 5000)
 
 bufferSize          = 1024
 
