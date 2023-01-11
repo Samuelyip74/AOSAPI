@@ -150,12 +150,24 @@ try:
 
             
             # 
-            # If we receive AR_COMPOUD_REPORT.
+            # If we receive AR_COMPOUND_MESSAGE_REPORT.
             # we have to parse it to submessages,
             # and then extract data and save them to database.
             #
             if(message_type == "AR_COMPOUND_MESSAGE_REPORT"):
-                pass
+                msg_count = int(message[1][0:2].hex())
+                # print("AR_COMPOUND_MESSAGE_REPORT")
+                offset = 0
+                for i in range(msg_count):
+                    payload = message[1][4 + offset:]
+                    msg_type = get_msg_type(payload[0:2])
+                    print(msg_type)
+                    if(msg_type == "AR_STATION_REPORT"):
+                        size = 44
+                        sub_msg = message[1][4 + offset: 4 + offset + size]
+                        print(sub_msg)
+                    offset += size
+
 
             if(message_type == "AR_STATION_REPORT"):
                 print ("Received AR_STATION_REPORT")
