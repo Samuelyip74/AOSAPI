@@ -363,7 +363,13 @@ class MyUDPHandler(socketserver.BaseRequestHandler):
 
 if __name__ == "__main__":
     print("Service started ...")
-    print("RTLS server up and listening to data")    
+    print("Press Ctrl-C to terminate service.")    
+    print("RTLS server up and listening to data...")    
+
     HOST, PORT = "localhost", 5000
     with socketserver.UDPServer((HOST, PORT), MyUDPHandler) as server:
-        server.serve_forever()
+        try:
+            server.serve_forever()
+        except KeyboardInterrupt:
+            print("Service terminated by Ctrl-C")
+            exit()
