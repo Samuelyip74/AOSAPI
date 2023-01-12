@@ -91,6 +91,37 @@ def parse_stationreport(payload):
     field.append(payload[24:28])    #10
     return field;    
 
+def parse_station_ex_report(payload):
+    #
+    # $payload = 56 byte binary ar_station_report message
+    # Return array:
+    # [0] = 6 byte - station MAC (ap or client)
+    # [1] = 6 byte - BSSID
+    # [2] = 33 byte - ESSID
+    # [3] = 1 byte - Channel
+    # [4] = 1 byte - Phy_type
+    # [5] = 1 byte - RSSI
+    # [6] = 2 byte - Duration
+    # [7] = 2 byte - Num_packets
+    # [8] = 1 byte - Noise_floor
+    # [9] = 1 byte - Classification
+    # [10] = 2 byte - Reserved
+
+    field = []
+    field.append(payload[0:6])      #0
+    field.append(payload[6:12])     #1
+    field.append(payload[12:45])    #2
+    field.append(payload[45:46])    #3
+    field.append(payload[46:47])    #4
+    field.append(payload[47:48])    #5
+    field.append(payload[48:50])    #6
+    field.append(payload[50:52])    #7
+    field.append(payload[52:53])    #8
+    field.append(payload[53:54])    #9
+    field.append(payload[54:56])    #10
+    return field;    
+
+
 def check_signature(message):
     return True
 
@@ -177,10 +208,27 @@ try:
                             "age"           : station_rpt[9].hex(),   
                         }
                         # print(station_rpt_json)
+                    if(msg_type == "AR_STATION_EX_REPORT"):
+                        size = 56
+                        sub_msg = message[1][4 + offset: 4 + offset + size]
+                        station_rpt = parse_station_ex_report(sub_msg[16:])
+                        station_rpt_json = {
+                            "ap_mac"        : station_rpt[0].hex(),
+                            "noise_floor"   : station_rpt[1].hex(),
+                            "data_rate"     : station_rpt[2].hex(),
+                            "channel"       : station_rpt[3].hex(),
+                            "rssi"          : station_rpt[4].hex(),
+                            "type"          : station_rpt[5].hex(),
+                            "associated"    : station_rpt[6].hex(),
+                            "radio_bssid"   : station_rpt[7].hex(),   
+                            "mon_bssid"     : station_rpt[8].hex(), 
+                            "age"           : station_rpt[9].hex(),   
+                        }
+                        # print(station_rpt_json)                        
                     offset += size
 
             if(message_type == "AR_STATION_REPORT"):
-                print ("Received AR_STATION_REPORT")
+                # print ("Received AR_STATION_REPORT")
                 station_rpt = parse_stationreport(message[1])
                 station_rpt_json = {
                     "ap_mac"        : station_rpt[0].hex(),
@@ -194,14 +242,27 @@ try:
                     "mon_bssid"     : station_rpt[8].hex(), 
                     "age"           : station_rpt[9].hex(),   
                 }
-                print(station_rpt_json)                
+                # print(station_rpt_json)                
                 # print ("Sent AR_STATION_REPORT")      
         
-            #clientMsg = "Message from Client:{}".format(message)
-            #clientIP  = "Client IP Address:{}".format(APIPaddress)
-            
-            # print(clientMsg)
-            # print(clientIP)
+            if(message_type == "AR_STATION_EX_REPORT"):
+                print ("Received AR_STATION_EX_REPORT")
+                station_rpt = parse_station_ex_report(message[1])
+                station_rpt_json = {
+                    "ap_mac"        : station_rpt[0].hex(),
+                    "BSSID"         : station_rpt[1].hex(),
+                    "ESSID"         : station_rpt[2].hex(),
+                    "channel"       : station_rpt[3].hex(),
+                    "Phy_type"      : station_rpt[4].hex(),
+                    "RSSI"          : station_rpt[5].hex(),
+                    "Duration"      : station_rpt[6].hex(),
+                    "Num_packets"   : station_rpt[7].hex(),   
+                    "Noise_floor"   : station_rpt[8].hex(), 
+                    "Classification": station_rpt[9].hex(),  
+                    "Reserved"      : station_rpt[10].hex(),  
+                }
+                print(station_rpt_json) 
+
     else:
         # DO NOTHING
         pass
