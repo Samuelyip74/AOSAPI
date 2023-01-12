@@ -260,7 +260,7 @@ class MyUDPHandler(socketserver.BaseRequestHandler):
                             "mon_bssid"     : station_rpt[8].hex(), 
                             "age"           : station_rpt[9].hex(),   
                         }
-                        output = ("ap_mac:" + station_rpt[0].hex() + ","  
+                        output = ("AR_STATION_REPORT - ap_mac:" + station_rpt[0].hex() + ","  
                         +   "noise_floor:"   + station_rpt[1].hex() + "," 
                         +   "data_rate:"     + station_rpt[2].hex() + ","
                         +   "channel:"       + station_rpt[3].hex() + ","
@@ -270,7 +270,6 @@ class MyUDPHandler(socketserver.BaseRequestHandler):
                         +   "radio_bssid:"   + station_rpt[7].hex() + ","
                         +   "mon_bssid:"     + station_rpt[8].hex() + ","
                         +   "age:"           + station_rpt[9].hex() + "\n")                    
-
                         file.write(output) 
                         print(station_rpt_json)
                     if(msg_type == "AR_STATION_EX_REPORT"):
@@ -292,7 +291,7 @@ class MyUDPHandler(socketserver.BaseRequestHandler):
                             "Reserved"      : station_rpt[10].hex(),    
                         }
 
-                        output = ("ap_mac:" + station_rpt[0].hex() + ","  
+                        output = ("AR_STATION_EX_REPORT - ap_mac:" + station_rpt[0].hex() + ","  
                         +    "BSSID:"        + station_rpt[1].hex() + "," 
                         +    "ESSID:"        + station_rpt[2].hex() + "," 
                         +   "channel:"       + station_rpt[3].hex() + "," 
@@ -324,7 +323,7 @@ class MyUDPHandler(socketserver.BaseRequestHandler):
                             "Match_method"  : station_rpt[10].hex(),  
                             "Reserved"      : station_rpt[11].hex(),   
                         }
-                        output = ("BSSID:" + station_rpt[0].hex() + "," 
+                        output = ("AR_AP_EX_REPORT - BSSID:" + station_rpt[0].hex() + "," 
                         +    "ESSID:"        + station_rpt[1].hex() + "," 
                         +   "channel:"       + station_rpt[2].hex() + "," 
                         +   "Phy_type:"      + station_rpt[3].hex() + "," 
@@ -335,8 +334,7 @@ class MyUDPHandler(socketserver.BaseRequestHandler):
                         +   "Classification:"+ station_rpt[8].hex() + ","   
                         +   "Match_type:"    + station_rpt[9].hex() + ","   
                         +   "Match_method:"  + station_rpt[10].hex()+ ","
-                        +   "Reserved:"      + station_rpt[9].hex() + "\n")                       
-
+                        +   "Reserved:"      + station_rpt[11].hex() + "\n")                       
                         file.write(output)                         
                         print(station_rpt_json)  
                     if(msg_type == "AR_TAG_REPORT"):
@@ -358,6 +356,19 @@ class MyUDPHandler(socketserver.BaseRequestHandler):
                             "Battery"       : station_rpt[10].hex(),  
                             "Reserved"      : station_rpt[11].hex(),   
                         }
+                        output = ("AR_TAG_REPORT - BSSID:" + station_rpt[0].hex() + "," 
+                        +    "ESSID:"      + station_rpt[1].hex() + "," 
+                        +   "Noise_floor:" + station_rpt[2].hex() + "," 
+                        +   "Timestamp:"   + station_rpt[3].hex() + "," 
+                        +   "Tag_mac:"     + station_rpt[4].hex() + "," 
+                        +   "Frame_control:"      + station_rpt[5].hex() + "," 
+                        +   "Sequence:"     + station_rpt[6].hex() + ","   
+                        +   "Data rate:"    + station_rpt[7].hex() + ","  
+                        +   "Tx_power:"     + station_rpt[8].hex() + ","   
+                        +   "Channel:"      + station_rpt[9].hex() + ","   
+                        +   "Battery:"      + station_rpt[10].hex()+ ","
+                        +   "Reserved:"     + station_rpt[11].hex() + "\n")                       
+                        file.write(output)                           
                         print(station_rpt_json)                                                                       
                     offset += size
 
@@ -376,6 +387,17 @@ class MyUDPHandler(socketserver.BaseRequestHandler):
                     "mon_bssid"     : station_rpt[8].hex(), 
                     "age"           : station_rpt[9].hex(),   
                 }
+                output = ("AR_STATION_REPORT - ap_mac:" + station_rpt[0].hex() + ","  
+                +   "noise_floor:"   + station_rpt[1].hex() + "," 
+                +   "data_rate:"     + station_rpt[2].hex() + ","
+                +   "channel:"       + station_rpt[3].hex() + ","
+                +   "rssi:"          + station_rpt[4].hex() + ","
+                +   "type:"          + station_rpt[5].hex() + ","
+                +   "associated:"    + station_rpt[6].hex() + ","
+                +   "radio_bssid:"   + station_rpt[7].hex() + ","
+                +   "mon_bssid:"     + station_rpt[8].hex() + ","
+                +   "age:"           + station_rpt[9].hex() + "\n")                    
+                file.write(output)                 
                 print(station_rpt_json)                
                 # print ("Sent AR_STATION_REPORT")      
         
@@ -395,6 +417,18 @@ class MyUDPHandler(socketserver.BaseRequestHandler):
                     "Classification": station_rpt[9].hex(),  
                     "Reserved"      : station_rpt[10].hex(),  
                 }
+                output = ("AR_STATION_EX_REPORT - ap_mac:" + station_rpt[0].hex() + ","  
+                +    "BSSID:"        + station_rpt[1].hex() + "," 
+                +    "ESSID:"        + station_rpt[2].hex() + "," 
+                +   "channel:"       + station_rpt[3].hex() + "," 
+                +   "Phy_type:"      + station_rpt[4].hex() + "," 
+                +   "RSSI:"          + station_rpt[5].hex() + "," 
+                +   "Duration:"      + station_rpt[6].hex() + "," 
+                +   "Num_packets:"   + station_rpt[7].hex() + ","   
+                +   "Noise_floor:"   + station_rpt[8].hex() + ","  
+                +   "Classification:"+ station_rpt[9].hex() + ","   
+                +   "Reserved:"      + station_rpt[10].hex(), + "\n")                       
+                file.write(output)                 
                 print(station_rpt_json) 
 
         else:
