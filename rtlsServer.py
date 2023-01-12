@@ -79,16 +79,16 @@ def parse_stationreport(payload):
     # [9] = 4 byte - age, # of seconds since the last packet was heard from this station
     #
     field = []
-    field.append(payload[0:6]) 
-    field.append(payload[6:7]) 
-    field.append(payload[7:8]) 
-    field.append(payload[8:9]) 
-    field.append(payload[9:10]) 
-    field.append(payload[10:11]) 
-    field.append(payload[11:12]) 
-    field.append(payload[12:18]) 
-    field.append(payload[18:24]) 
-    field.append(payload[24:28]) 
+    field.append(payload[0:6])      #1
+    field.append(payload[6:7])      #2
+    field.append(payload[7:8])      #3
+    field.append(payload[8:9])      #4
+    field.append(payload[9:10])     #5
+    field.append(payload[10:11])    #6
+    field.append(payload[11:12])    #7
+    field.append(payload[12:18])    #8
+    field.append(payload[18:24])    #9
+    field.append(payload[24:28])    #10
     return field;    
 
 def check_signature(message):
@@ -161,11 +161,23 @@ try:
                 for i in range(msg_count):
                     payload = message[1][4 + offset:]
                     msg_type = get_msg_type(payload[0:2])
-                    print(msg_type)
                     if(msg_type == "AR_STATION_REPORT"):
                         size = 44
                         sub_msg = message[1][4 + offset: 4 + offset + size]
-                        print(sub_msg)
+                        station_rpt = parse_stationreport(sub_msg[16:])
+                        station_rpt_json = {
+                            "ap_mac"        : station_rpt[0].hex(),
+                            "noise_floor"   : station_rpt[1].hex(),
+                            "data_rate"     : station_rpt[2].hex(),
+                            "channel"       : station_rpt[3].hex(),
+                            "rssi"          : station_rpt[4].hex(),
+                            "type"          : station_rpt[5].hex(),
+                            "associated"    : station_rpt[6].hex(),
+                            "radio_bssid"   : station_rpt[7].hex(),   
+                            "mon_bssid"     : station_rpt[8].hex(), 
+                            "age"           : station_rpt[9].hex(),   
+                        }
+                        # print(station_rpt_json)
                     offset += size
 
 
