@@ -129,7 +129,7 @@ try:
             message_type = get_msg_type(message[0])
 
             if(message_type == "AR_AP_NOTIFICATION"):
-                print ("Received AR_AP_NOTIFICATION")
+                # print ("Received AR_AP_NOTIFICATION")
                 # Change message type to acknowledgement
                 header = parse_header(message[0])
                 header[0] = bytes.fromhex('0010')
@@ -146,9 +146,8 @@ try:
 
                 # Send ack to AP
                 UDPServerSocket.sendto(ack_msg, APIPaddress) 
-                print ("Sent AR_AP_ACKNOWLEDGEMENT")
-
-            
+                # print ("Sent AR_AP_ACKNOWLEDGEMENT")
+                           
             # 
             # If we receive AR_COMPOUND_MESSAGE_REPORT.
             # we have to parse it to submessages,
@@ -180,11 +179,23 @@ try:
                         # print(station_rpt_json)
                     offset += size
 
-
             if(message_type == "AR_STATION_REPORT"):
                 print ("Received AR_STATION_REPORT")
-                msg = parse_stationreport(message[1])
-                print ("Sent AR_STATION_REPORT")      
+                station_rpt = parse_stationreport(message[1])
+                station_rpt_json = {
+                    "ap_mac"        : station_rpt[0].hex(),
+                    "noise_floor"   : station_rpt[1].hex(),
+                    "data_rate"     : station_rpt[2].hex(),
+                    "channel"       : station_rpt[3].hex(),
+                    "rssi"          : station_rpt[4].hex(),
+                    "type"          : station_rpt[5].hex(),
+                    "associated"    : station_rpt[6].hex(),
+                    "radio_bssid"   : station_rpt[7].hex(),   
+                    "mon_bssid"     : station_rpt[8].hex(), 
+                    "age"           : station_rpt[9].hex(),   
+                }
+                print(station_rpt_json)                
+                # print ("Sent AR_STATION_REPORT")      
         
             #clientMsg = "Message from Client:{}".format(message)
             #clientIP  = "Client IP Address:{}".format(APIPaddress)
