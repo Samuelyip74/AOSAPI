@@ -1,0 +1,1 @@
+ap_mac:9c1c1268f062,noise_floor:5d,data_rate:0a,channel:06,rssi:c4,type:02,associated:01,radio_bssid:9c1c1268f060,mon_bssid:9c1c1268f062,age:00000001
