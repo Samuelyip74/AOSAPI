@@ -1,4 +1,3 @@
-AR_STATION_REPORT - ap_mac:9c1c1268f062,noise_floor:5d,data_rate:0a,channel:06,rssi:c4,type:02,associated:01,radio_bssid:9c1c1268f060,mon_bssid:9c1c1268f062,age:00000001
 AR_TAG_REPORT - BSSID:9c1c1268f062,ESSID:c4,Noise_floor:0a,Timestamp:00100101,Tag_mac:9c1c1268f060,Frame_control:0000,Sequence:0000,Data rate:01,Tx_power:ff,Channel:06,Battery:ff,Reserved:0000
 AR_STATION_REPORT - ap_mac:9c1c1268f062,noise_floor:5d,data_rate:0a,channel:06,rssi:c4,type:02,associated:01,radio_bssid:9c1c1268f060,mon_bssid:9c1c1268f062,age:00000001
 AR_TAG_REPORT - BSSID:9c1c1268f062,ESSID:c4,Noise_floor:0a,Timestamp:00100101,Tag_mac:9c1c1268f060,Frame_control:0000,Sequence:0000,Data rate:01,Tx_power:ff,Channel:06,Battery:ff,Reserved:0000

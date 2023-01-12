@@ -196,7 +196,7 @@ class MyUDPHandler(socketserver.BaseRequestHandler):
     """
 
     def handle(self):
-        file = open("rtlsData.txt", "a+")
+        file = open("Data.txt", "a+")
 
         bytesAddressPair = self.request[0].strip()
         socket = self.request[1]
