@@ -12,7 +12,6 @@ def get_msg_type(header):
     # header = 16 byte binary RTLS header
     # return string - name/type of the message
     # 
-    print(header)
     type = header[0:2]
     if(type == b"\x00\x00"): return "AR_AS_CONFIG_SET"
     if(type == b"\x00\x01"): return "AR_STATION_REQUEST"
