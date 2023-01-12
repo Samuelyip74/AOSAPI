@@ -4,6 +4,7 @@
 import socket
 import sys
 import hmac
+from time import sleep
 
 key_val = "abcxyz"
 
@@ -199,6 +200,7 @@ bufferSize  = 1024
 try:
     UDPServerSocket = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM)
     UDPServerSocket.bind((localIP, localPort))
+
     print("Service started ...")
     print("RTLS server up and listening to data")
 except socket.error as e:
@@ -206,8 +208,9 @@ except socket.error as e:
     sys.exit(1)
 
 # Listen for incoming datagrams
-try:
-    while(True):
+while(True):
+    try:
+        
         bytesAddressPair = UDPServerSocket.recvfrom(bufferSize)
 
         APIPaddress = bytesAddressPair[1]
@@ -240,7 +243,7 @@ try:
                 # Send ack to AP
                 UDPServerSocket.sendto(ack_msg, APIPaddress) 
                 # print ("Sent AR_AP_ACKNOWLEDGEMENT")
-                           
+                            
             # 
             # If we receive AR_COMPOUND_MESSAGE_REPORT.
             # we have to parse it to submessages,
@@ -368,12 +371,12 @@ try:
                 }
                 print(station_rpt_json) 
 
-    else:
-        # DO NOTHING
-        pass
+        else:
+            # DO NOTHING
+            pass
 
-except KeyboardInterrupt:
-    print("KeyboardInterrupted")
-    exit()
+    except KeyboardInterrupt:
+        print('Hello user you have pressed ctrl-c button.')
+        exit()
 
     
