@@ -26,7 +26,6 @@ def get_msg_type(header):
     if(type == b"\x00\x18"): return "AR_AP_EX_REPORT"
     else: return "UNKNOWN"
     
-
 def rcv_explode(message):
     #
     # $message = whole RTLS binary message
@@ -153,6 +152,37 @@ def parse_ap_ex_report(payload):
     field.append(payload[50:52])    #11    
     return field;    
 
+def parse_ap_tag_report(payload):
+    #
+    # $payload = 28 byte binary ar_station_report message
+    # Return array:
+    # [0] = 6 byte - BSSID
+    # [1] = 1 byte - RSSI
+    # [2] = 1 byte - Noise_floor
+    # [3] = 4 byte - Timestamp
+    # [4] = 6 byte - Tag_mac
+    # [5] = 2 byte - Frame_control
+    # [6] = 2 byte - Sequence
+    # [7] = 1 byte - Data rate
+    # [8] = 1 byte - Tx_power
+    # [9] = 1 byte - Channel
+    # [10] = 1 byte - Battery
+    # [11] = 2 byte - Reserved
+
+    field = []
+    field.append(payload[0:6])      #0
+    field.append(payload[6:7])      #1
+    field.append(payload[7:8])      #2
+    field.append(payload[8:12])     #3
+    field.append(payload[12:18])    #4
+    field.append(payload[18:20])    #5
+    field.append(payload[20:22])    #6
+    field.append(payload[22:23])    #7
+    field.append(payload[23:24])    #8
+    field.append(payload[24:25])    #9
+    field.append(payload[25:26])    #10
+    field.append(payload[26:28])    #11    
+    return field;    
 
 def check_signature(message):
     return True
@@ -164,7 +194,6 @@ IPAddr = socket.gethostbyname(hostname)
 localIP     = IPAddr
 localPort   = 5000
 bufferSize  = 1024
-
  
 # Create a socket and bind to server
 try:
@@ -185,13 +214,14 @@ try:
         message = rcv_explode(bytesAddressPair[0])
 
         if check_signature(message):            
-            #
-            # If we receive AR_AP_NOTIFICATION,
-            # we have to acknowledge it.
-            #
+
             message_type = get_msg_type(message[0])
 
             if(message_type == "AR_AP_NOTIFICATION"):
+                #
+                # If we receive AR_AP_NOTIFICATION,
+                # we have to acknowledge it.
+                #                
                 # print ("Received AR_AP_NOTIFICATION")
                 # Change message type to acknowledgement
                 header = parse_header(message[0])
@@ -218,12 +248,13 @@ try:
             #
             if(message_type == "AR_COMPOUND_MESSAGE_REPORT"):
                 msg_count = int(message[1][0:2].hex())
-                # print("AR_COMPOUND_MESSAGE_REPORT")
+                print("AR_COMPOUND_MESSAGE_REPORT")
                 offset = 0
                 for i in range(msg_count):
                     payload = message[1][4 + offset:]
                     msg_type = get_msg_type(payload[0:2])
                     if(msg_type == "AR_STATION_REPORT"):
+                        print("AR_STATION_REPORT")
                         size = 44
                         sub_msg = message[1][4 + offset: 4 + offset + size]
                         station_rpt = parse_stationreport(sub_msg[16:])
@@ -239,8 +270,9 @@ try:
                             "mon_bssid"     : station_rpt[8].hex(), 
                             "age"           : station_rpt[9].hex(),   
                         }
-                        # print(station_rpt_json)
+                        print(station_rpt_json)
                     if(msg_type == "AR_STATION_EX_REPORT"):
+                        print("AR_STATION_EX_REPORT")
                         size = 56
                         sub_msg = message[1][4 + offset: 4 + offset + size]
                         station_rpt = parse_station_ex_report(sub_msg[16:])
@@ -257,8 +289,9 @@ try:
                             "Classification": station_rpt[9].hex(),  
                             "Reserved"      : station_rpt[10].hex(),    
                         }
-                        # print(station_rpt_json) 
+                        print(station_rpt_json) 
                     if(msg_type == "AR_AP_EX_REPORT"):
+                        print("AR_AP_EX_REPORT")                       
                         size = 52
                         sub_msg = message[1][4 + offset: 4 + offset + size]
                         station_rpt = parse_ap_ex_report(sub_msg[16:])
@@ -276,7 +309,27 @@ try:
                             "Match_method"  : station_rpt[10].hex(),  
                             "Reserved"      : station_rpt[11].hex(),   
                         }
-                        # print(station_rpt_json)                                                
+                        print(station_rpt_json)  
+                    if(msg_type == "AR_TAG_REPORT"):
+                        print("AR_TAG_REPORT")                       
+                        size = 44
+                        sub_msg = message[1][4 + offset: 4 + offset + size]
+                        station_rpt = parse_ap_tag_report(sub_msg[16:])
+                        station_rpt_json = {
+                            "BSSID"         : station_rpt[0].hex(),
+                            "RSSI"          : station_rpt[1].hex(),
+                            "Noise_floor"   : station_rpt[2].hex(),
+                            "Timestamp"     : station_rpt[3].hex(),
+                            "Tag_mac"       : station_rpt[4].hex(),
+                            "Frame_control" : station_rpt[5].hex(),
+                            "Sequence"      : station_rpt[6].hex(),
+                            "Data rate"     : station_rpt[7].hex(),   
+                            "Tx_power"      : station_rpt[8].hex(), 
+                            "Channel"       : station_rpt[9].hex(),  
+                            "Battery"       : station_rpt[10].hex(),  
+                            "Reserved"      : station_rpt[11].hex(),   
+                        }
+                        print(station_rpt_json)                                                                       
                     offset += size
 
             if(message_type == "AR_STATION_REPORT"):
@@ -294,11 +347,11 @@ try:
                     "mon_bssid"     : station_rpt[8].hex(), 
                     "age"           : station_rpt[9].hex(),   
                 }
-                # print(station_rpt_json)                
+                print(station_rpt_json)                
                 # print ("Sent AR_STATION_REPORT")      
         
             if(message_type == "AR_STATION_EX_REPORT"):
-                print ("Received AR_STATION_EX_REPORT")
+                #print ("Received AR_STATION_EX_REPORT")
                 station_rpt = parse_station_ex_report(message[1])
                 station_rpt_json = {
                     "ap_mac"        : station_rpt[0].hex(),
