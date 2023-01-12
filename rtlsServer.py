@@ -121,6 +121,38 @@ def parse_station_ex_report(payload):
     field.append(payload[54:56])    #10
     return field;    
 
+def parse_ap_ex_report(payload):
+    #
+    # $payload = 52 byte binary ar_station_report message
+    # Return array:
+    # [0] = 6 byte - BSSID
+    # [1] = 33 byte - ESSID
+    # [2] = 1 byte - Channel
+    # [3] = 1 byte - Phy_type
+    # [4] = 1 byte - RSSI
+    # [5] = 2 byte - Duration
+    # [6] = 2 byte - Num_packets
+    # [7] = 1 byte - Noise_floor
+    # [8] = 1 byte - Classification
+    # [9] = 1 byte - Match_type
+    # [10] = 1 byte - Match_method
+    # [11] = 2 byte - Reserved
+
+    field = []
+    field.append(payload[0:6])      #0
+    field.append(payload[6:39])     #1
+    field.append(payload[39:40])    #2
+    field.append(payload[40:41])    #3
+    field.append(payload[41:42])    #4
+    field.append(payload[42:44])    #5
+    field.append(payload[44:46])    #6
+    field.append(payload[46:47])    #7
+    field.append(payload[47:48])    #8
+    field.append(payload[48:49])    #9
+    field.append(payload[49:50])    #10
+    field.append(payload[50:52])    #11    
+    return field;    
+
 
 def check_signature(message):
     return True
@@ -214,17 +246,37 @@ try:
                         station_rpt = parse_station_ex_report(sub_msg[16:])
                         station_rpt_json = {
                             "ap_mac"        : station_rpt[0].hex(),
-                            "noise_floor"   : station_rpt[1].hex(),
-                            "data_rate"     : station_rpt[2].hex(),
+                            "BSSID"         : station_rpt[1].hex(),
+                            "ESSID"         : station_rpt[2].hex(),
                             "channel"       : station_rpt[3].hex(),
-                            "rssi"          : station_rpt[4].hex(),
-                            "type"          : station_rpt[5].hex(),
-                            "associated"    : station_rpt[6].hex(),
-                            "radio_bssid"   : station_rpt[7].hex(),   
-                            "mon_bssid"     : station_rpt[8].hex(), 
-                            "age"           : station_rpt[9].hex(),   
+                            "Phy_type"      : station_rpt[4].hex(),
+                            "RSSI"          : station_rpt[5].hex(),
+                            "Duration"      : station_rpt[6].hex(),
+                            "Num_packets"   : station_rpt[7].hex(),   
+                            "Noise_floor"   : station_rpt[8].hex(), 
+                            "Classification": station_rpt[9].hex(),  
+                            "Reserved"      : station_rpt[10].hex(),    
                         }
-                        # print(station_rpt_json)                        
+                        # print(station_rpt_json) 
+                    if(msg_type == "AR_AP_EX_REPORT"):
+                        size = 52
+                        sub_msg = message[1][4 + offset: 4 + offset + size]
+                        station_rpt = parse_ap_ex_report(sub_msg[16:])
+                        station_rpt_json = {
+                            "BSSID"         : station_rpt[0].hex(),
+                            "ESSID"         : station_rpt[1].hex(),
+                            "Channel"       : station_rpt[2].hex(),
+                            "Phy_type"      : station_rpt[3].hex(),
+                            "RSSI"          : station_rpt[4].hex(),
+                            "Duration"      : station_rpt[5].hex(),
+                            "Num_packets"   : station_rpt[6].hex(),
+                            "Noise_floor"   : station_rpt[7].hex(),   
+                            "Classification": station_rpt[8].hex(), 
+                            "Match_type"    : station_rpt[9].hex(),  
+                            "Match_method"  : station_rpt[10].hex(),  
+                            "Reserved"      : station_rpt[11].hex(),   
+                        }
+                        # print(station_rpt_json)                                                
                     offset += size
 
             if(message_type == "AR_STATION_REPORT"):
