@@ -1,6 +1,7 @@
-import socketserver
-import socket
 
+# https://github.com/lukaskaplan/aruba-rtls
+
+import socket
 import sys
 import hmac
 from time import sleep
@@ -12,7 +13,6 @@ def get_msg_type(header):
     # header = 16 byte binary RTLS header
     # return string - name/type of the message
     # 
-    print(header)
     type = header[0:2]
     if(type == b"\x00\x00"): return "AR_AS_CONFIG_SET"
     if(type == b"\x00\x01"): return "AR_STATION_REQUEST"
@@ -188,20 +188,34 @@ def parse_ap_tag_report(payload):
 def check_signature(message):
     return True
 
-class MyUDPHandler(socketserver.BaseRequestHandler):
-    """
-    This class works similar to the TCP handler class, except that
-    self.request consists of a pair of data and client socket, and since
-    there is no connection the client address must be given explicitly
-    when sending data back via sendto().
-    """
+# local Server information
+print("Starting RTLS Service ...")
+hostname = socket.gethostname()
+IPAddr = socket.gethostbyname(hostname)
+localIP     = IPAddr
+localPort   = 5000
+bufferSize  = 1024
+ 
+# Create a socket and bind to server
+try:
+    UDPServerSocket = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM)
+    UDPServerSocket.bind((localIP, localPort))
 
-    def handle(self):
-        bytesAddressPair = self.request[0].strip()
-        socket = self.request[1]
-        #print("{} wrote:".format(self.client_address[0]))
-        #print(data)
-        message = rcv_explode(bytesAddressPair)
+    print("Service started ...")
+    print("RTLS server up and listening to data")
+except socket.error as e:
+    print ("\nError starting service: %s" % e)
+    sys.exit(1)
+
+# Listen for incoming datagrams
+while(True):
+    try:
+        
+        bytesAddressPair = UDPServerSocket.recvfrom(bufferSize)
+
+        APIPaddress = bytesAddressPair[1]
+        message = rcv_explode(bytesAddressPair[0])
+
         if check_signature(message):            
 
             message_type = get_msg_type(message[0])
@@ -227,7 +241,7 @@ class MyUDPHandler(socketserver.BaseRequestHandler):
                 ack_msg = ack_header + ack_checksum[:20]
 
                 # Send ack to AP
-                socket.sendto(ack_msg.upper(), self.client_address)
+                UDPServerSocket.sendto(ack_msg, APIPaddress) 
                 # print ("Sent AR_AP_ACKNOWLEDGEMENT")
                             
             # 
@@ -361,10 +375,8 @@ class MyUDPHandler(socketserver.BaseRequestHandler):
             # DO NOTHING
             pass
 
+    except KeyboardInterrupt:
+        print('Hello user you have pressed ctrl-c button.')
+        exit()
 
-if __name__ == "__main__":
-    print("Service started ...")
-    print("RTLS server up and listening to data")    
-    HOST, PORT = "localhost", 5000
-    with socketserver.UDPServer((HOST, PORT), MyUDPHandler) as server:
-        server.serve_forever()
+    
