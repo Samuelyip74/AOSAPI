@@ -212,27 +212,22 @@ class MyUDPHandler(socketserver.BaseRequestHandler):
                 # If we receive AR_AP_NOTIFICATION,
                 # we have to acknowledge it.
                 #                
-                print ("Received AR_AP_NOTIFICATION")
+                #print ("Received AR_AP_NOTIFICATION")
                 # Change message type to acknowledgement
-                print(message[0].hex())
                 header = parse_header(message[0])
                 header[0] = bytes.fromhex('0010')
                 
                 # Implode header into bytes for sending
                 ack_header = b''.join(header)
-                
-                print(ack_header.hex())
                 # Generate hmac signature
                 ack_hmac = hmac.new(key=key_val.encode(), msg=ack_header, digestmod="sha1")
                 ack_checksum = ack_hmac.digest()
-                ack_checksum_hex = ack_checksum.hex()
-                print(ack_checksum_hex)
                 
                 # Create RTLS acknowledge packet, RTLS header + signature
                 ack_msg = ack_header + ack_checksum
 
                 # Send ack to AP
-                socket.sendto(ack_msg.upper(), self.client_address)
+                socket.sendto(ack_msg, self.client_address)
                 # print ("Sent AR_AP_ACKNOWLEDGEMENT")
                             
             # 
@@ -448,7 +443,7 @@ if __name__ == "__main__":
     print("RTLS server up and listening to data...")    
 
     HOST, PORT = "localhost", 5000
-    HOST, PORT = "192.168.14.28", 5000
+    # HOST, PORT = "192.168.14.28", 5000
 
     with socketserver.UDPServer((HOST, PORT), MyUDPHandler) as server:
         try:

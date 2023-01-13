@@ -15,12 +15,12 @@ ap_notificaiton      = bytes.fromhex('0015038301000000946424c31dda000058b89dc0dc
 
 #bytesToSend         = station_rpt
 #bytesToSend         = tag_rpt
-#bytesToSend         = compound_msg
-bytesToSend         = ap_notificaiton
+bytesToSend         = compound_msg
+#bytesToSend         = ap_notificaiton
 
 # serverAddressPort   = (IPAddr, 5000)
 serverAddressPort   = ('127.0.0.1', 5000)
-serverAddressPort   = ('192.168.14.28', 5000)
+# serverAddressPort   = ('192.168.14.28', 5000)
 
 bufferSize          = 1024
 # Create a UDP socket at client side
@@ -30,5 +30,7 @@ UDPClientSocket = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM)
 UDPClientSocket.sendto(bytesToSend, serverAddressPort)
 # msgFromServer = UDPClientSocket.recvfrom(bufferSize)
 # msg = "Message from Server {}".format(msgFromServer[0])
-# print(msg)
+# #print(msg)
 print("Sent")
+print("expect:  19c821c41f0d22af2c67fceab09a963304e51a75")
+
