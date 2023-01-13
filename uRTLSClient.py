@@ -11,15 +11,17 @@ tag_rpt              = bytes.fromhex('0012fcc30200001c9c1c12ce8f0600009c1c1268f0
 station_rpt          = bytes.fromhex('0013fcc30200001c9c1c12ce8f0600009c1c1268f0625d0a06c402019c1c1268f0609c1c1268f06200000001AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA')
 compound_msg         = bytes.fromhex("0014fcc50100005c9c1c12ce8f060000000200000013fcc30200001c9c1c12ce8f0600009c1c1268f0625d0a06c402019c1c1268f0609c1c1268f062000000010013fcc40200001c9c1c12ce8f060000085700190c5f5d0006d901019c1c1268f0609c1c1268f06400000001ebdee8abce05d6f25aea9a2ce8ea5ef81162c038")
 compound_msg         = bytes.fromhex("0014fcc50100005c9c1c12ce8f060000000300000012fcc30200001c9c1c12ce8f0600009c1c1268f062c40a001001019c1c1268f0600000000001ff06ff00000013fcc30200001c9c1c12ce8f0600009c1c1268f0625d0a06c402019c1c1268f0609c1c1268f062000000010012fcc30200001c9c1c12ce8f0600009c1c1268f062c40a001001019c1c1268f0600000000001ff06ff0000ebdee8abce05d6f25aea9a2ce8ea5ef81162c038")
-ap_notificaiton      = bytes.fromhex('0015fcc30200001c9c1c12ce8f0600009c1c1268f062c40a00109c1c1268f0600010001001ff06ff0000AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA')
+ap_notificaiton      = bytes.fromhex('0015038301000000946424c31dda000058b89dc0dcd18308eccfa4d22247148a85231b9b')
 
 #bytesToSend         = station_rpt
 #bytesToSend         = tag_rpt
-bytesToSend         = compound_msg
-#bytesToSend         = ap_notificaiton
+#bytesToSend         = compound_msg
+bytesToSend         = ap_notificaiton
 
 # serverAddressPort   = (IPAddr, 5000)
 serverAddressPort   = ('127.0.0.1', 5000)
+serverAddressPort   = ('192.168.14.28', 5000)
+
 bufferSize          = 1024
 # Create a UDP socket at client side
 UDPClientSocket = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM)
