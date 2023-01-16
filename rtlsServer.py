@@ -211,7 +211,7 @@ class MyUDPHandler(socketserver.BaseRequestHandler):
                 # If we receive AR_AP_NOTIFICATION,
                 # we have to acknowledge it.
                 #                
-                #print ("Received AR_AP_NOTIFICATION")
+                # print ("Received AR_AP_NOTIFICATION")
                 # Change message type to acknowledgement
                 header = parse_header(message[0])
                 header[0] = bytes.fromhex('0010')
