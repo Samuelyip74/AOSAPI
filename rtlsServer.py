@@ -200,8 +200,7 @@ class MyUDPHandler(socketserver.BaseRequestHandler):
 
         bytesAddressPair = self.request[0].strip()
         socket = self.request[1]
-        #print("{} wrote:".format(self.client_address[0]))
-        #print(data)
+
         message = rcv_explode(bytesAddressPair)
         if check_signature(message):            
 
