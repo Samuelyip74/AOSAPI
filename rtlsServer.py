@@ -365,6 +365,18 @@ def process_rvd_data(stream):
         # DO NOTHING
         return None, None
         
+def save_to_file(msg_type, rvd_data_json):
+    try:
+        with open('Data.txt', '+a') as outfile:
+            json.dump(rvd_data_json, outfile)
+            outfile.write("\n")                       
+    except:
+        # Do nothing
+        return
+
+def save_to_server(msg_type, rvd_data_json):
+    # Insert code here
+    pass
 
 class MyUDPHandler(socketserver.BaseRequestHandler):
     """
@@ -375,247 +387,15 @@ class MyUDPHandler(socketserver.BaseRequestHandler):
     """
 
     def handle(self):
-        # file = open("Data.txt", "a+")
-
         msg_type, rvd_data_json = process_rvd_data(self)
         print(msg_type)
         print(json.dumps(rvd_data_json,indent=1))
-        # bytesAddressPair = self.request[0].strip()
-        # socket = self.request[1]
 
-        # message = rcv_explode(bytesAddressPair)
-        # if check_signature(message):            
+        save_to_file(msg_type, rvd_data_json)
 
-        #     message_type = get_msg_type(message[0])
+        save_to_server(msg_type, rvd_data_json)
 
-        #     if(message_type == "AR_AP_NOTIFICATION"):
-        #         #
-        #         # If we receive AR_AP_NOTIFICATION,
-        #         # we have to acknowledge it.
-        #         #                
-        #         # print ("Received AR_AP_NOTIFICATION")
-        #         # Change message type to acknowledgement
-        #         header = parse_header(message[0])
-        #         header[0] = bytes.fromhex('0010')
-                
-        #         # Implode header into bytes for sending
-        #         ack_header = b''.join(header)
-        #         # Generate hmac signature
-        #         ack_hmac = hmac.new(key=key_val.encode(), msg=ack_header, digestmod="sha1")
-        #         ack_checksum = ack_hmac.digest()
-                
-        #         # Create RTLS acknowledge packet, RTLS header + signature
-        #         ack_msg = ack_header + ack_checksum
-
-        #         # Send ack to AP
-        #         socket.sendto(ack_msg, self.client_address)
-        #         # print ("Sent AR_AP_ACKNOWLEDGEMENT")
-                            
-        #     # 
-        #     # If we receive AR_COMPOUND_MESSAGE_REPORT.
-        #     # we have to parse it to submessages,
-        #     # and then extract data and save them to database.
-        #     #
-        #     if(message_type == "AR_COMPOUND_MESSAGE_REPORT"):
-        #         msg_count = int(message[1][0:2].hex())
-        #         print("AR_COMPOUND_MESSAGE_REPORT")
-        #         offset = 0
-        #         for i in range(msg_count):
-        #             payload = message[1][4 + offset:]
-        #             msg_type = get_msg_type(payload[0:2])
-        #             if(msg_type == "AR_STATION_REPORT"):
-        #                 print("AR_STATION_REPORT")
-        #                 size = 44
-        #                 sub_msg = message[1][4 + offset: 4 + offset + size]
-        #                 station_rpt = parse_stationreport(sub_msg[16:])
-        #                 station_rpt_json = {
-        #                     "ap_mac"        : station_rpt[0].hex(),
-        #                     "noise_floor"   : station_rpt[1].hex(),
-        #                     "data_rate"     : station_rpt[2].hex(),
-        #                     "channel"       : station_rpt[3].hex(),
-        #                     "rssi"          : station_rpt[4].hex(),
-        #                     "type"          : station_rpt[5].hex(),
-        #                     "associated"    : station_rpt[6].hex(),
-        #                     "radio_bssid"   : station_rpt[7].hex(),   
-        #                     "mon_bssid"     : station_rpt[8].hex(), 
-        #                     "age"           : station_rpt[9].hex(),   
-        #                 }
-        #                 output = ("AR_STATION_REPORT - ap_mac:" + station_rpt[0].hex() + ","  
-        #                 +   "noise_floor:"   + station_rpt[1].hex() + "," 
-        #                 +   "data_rate:"     + station_rpt[2].hex() + ","
-        #                 +   "channel:"       + station_rpt[3].hex() + ","
-        #                 +   "rssi:"          + station_rpt[4].hex() + ","
-        #                 +   "type:"          + station_rpt[5].hex() + ","
-        #                 +   "associated:"    + station_rpt[6].hex() + ","
-        #                 +   "radio_bssid:"   + station_rpt[7].hex() + ","
-        #                 +   "mon_bssid:"     + station_rpt[8].hex() + ","
-        #                 +   "age:"           + station_rpt[9].hex() + "\n")                    
-        #                 file.write(output) 
-        #                 print(station_rpt_json)
-        #             if(msg_type == "AR_STATION_EX_REPORT"):
-        #                 print("AR_STATION_EX_REPORT")
-        #                 size = 56
-        #                 sub_msg = message[1][4 + offset: 4 + offset + size]
-        #                 station_rpt = parse_station_ex_report(sub_msg[16:])
-        #                 station_rpt_json = {
-        #                     "ap_mac"        : station_rpt[0].hex(),
-        #                     "BSSID"         : station_rpt[1].hex(),
-        #                     "ESSID"         : station_rpt[2].hex(),
-        #                     "channel"       : station_rpt[3].hex(),
-        #                     "Phy_type"      : station_rpt[4].hex(),
-        #                     "RSSI"          : station_rpt[5].hex(),
-        #                     "Duration"      : station_rpt[6].hex(),
-        #                     "Num_packets"   : station_rpt[7].hex(),   
-        #                     "Noise_floor"   : station_rpt[8].hex(), 
-        #                     "Classification": station_rpt[9].hex(),  
-        #                     "Reserved"      : station_rpt[10].hex(),    
-        #                 }
-
-        #                 output = ("AR_STATION_EX_REPORT - ap_mac:" + station_rpt[0].hex() + ","  
-        #                 +    "BSSID:"        + station_rpt[1].hex() + "," 
-        #                 +    "ESSID:"        + station_rpt[2].hex() + "," 
-        #                 +   "channel:"       + station_rpt[3].hex() + "," 
-        #                 +   "Phy_type:"      + station_rpt[4].hex() + "," 
-        #                 +   "RSSI:"          + station_rpt[5].hex() + "," 
-        #                 +   "Duration:"      + station_rpt[6].hex() + "," 
-        #                 +   "Num_packets:"   + station_rpt[7].hex() + ","   
-        #                 +   "Noise_floor:"   + station_rpt[8].hex() + ","  
-        #                 +   "Classification:"+ station_rpt[9].hex() + ","   
-        #                 +   "Reserved:"      + station_rpt[10].hex(), + "\n")                       
-        #                 file.write(output) 
-        #                 print(station_rpt_json) 
-        #             if(msg_type == "AR_AP_EX_REPORT"):
-        #                 print("AR_AP_EX_REPORT")                       
-        #                 size = 52
-        #                 sub_msg = message[1][4 + offset: 4 + offset + size]
-        #                 station_rpt = parse_ap_ex_report(sub_msg[16:])
-        #                 station_rpt_json = {
-        #                     "BSSID"         : station_rpt[0].hex(),
-        #                     "ESSID"         : station_rpt[1].hex(),
-        #                     "Channel"       : station_rpt[2].hex(),
-        #                     "Phy_type"      : station_rpt[3].hex(),
-        #                     "RSSI"          : station_rpt[4].hex(),
-        #                     "Duration"      : station_rpt[5].hex(),
-        #                     "Num_packets"   : station_rpt[6].hex(),
-        #                     "Noise_floor"   : station_rpt[7].hex(),   
-        #                     "Classification": station_rpt[8].hex(), 
-        #                     "Match_type"    : station_rpt[9].hex(),  
-        #                     "Match_method"  : station_rpt[10].hex(),  
-        #                     "Reserved"      : station_rpt[11].hex(),   
-        #                 }
-        #                 output = ("AR_AP_EX_REPORT - BSSID:" + station_rpt[0].hex() + "," 
-        #                 +    "ESSID:"        + station_rpt[1].hex() + "," 
-        #                 +   "channel:"       + station_rpt[2].hex() + "," 
-        #                 +   "Phy_type:"      + station_rpt[3].hex() + "," 
-        #                 +   "RSSI:"          + station_rpt[4].hex() + "," 
-        #                 +   "Duration:"      + station_rpt[5].hex() + "," 
-        #                 +   "Num_packets:"   + station_rpt[6].hex() + ","   
-        #                 +   "Noise_floor:"   + station_rpt[7].hex() + ","  
-        #                 +   "Classification:"+ station_rpt[8].hex() + ","   
-        #                 +   "Match_type:"    + station_rpt[9].hex() + ","   
-        #                 +   "Match_method:"  + station_rpt[10].hex()+ ","
-        #                 +   "Reserved:"      + station_rpt[11].hex() + "\n")                       
-        #                 file.write(output)                         
-        #                 print(station_rpt_json)  
-        #             if(msg_type == "AR_TAG_REPORT"):
-        #                 print("AR_TAG_REPORT")                       
-        #                 size = 44
-        #                 sub_msg = message[1][4 + offset: 4 + offset + size]
-        #                 station_rpt = parse_ap_tag_report(sub_msg[16:])
-        #                 station_rpt_json = {
-        #                     "BSSID"         : station_rpt[0].hex(),
-        #                     "RSSI"          : station_rpt[1].hex(),
-        #                     "Noise_floor"   : station_rpt[2].hex(),
-        #                     "Timestamp"     : station_rpt[3].hex(),
-        #                     "Tag_mac"       : station_rpt[4].hex(),
-        #                     "Frame_control" : station_rpt[5].hex(),
-        #                     "Sequence"      : station_rpt[6].hex(),
-        #                     "Data rate"     : station_rpt[7].hex(),   
-        #                     "Tx_power"      : station_rpt[8].hex(), 
-        #                     "Channel"       : station_rpt[9].hex(),  
-        #                     "Battery"       : station_rpt[10].hex(),  
-        #                     "Reserved"      : station_rpt[11].hex(),   
-        #                 }
-        #                 output = ("AR_TAG_REPORT - BSSID:" + station_rpt[0].hex() + "," 
-        #                 +    "ESSID:"      + station_rpt[1].hex() + "," 
-        #                 +   "Noise_floor:" + station_rpt[2].hex() + "," 
-        #                 +   "Timestamp:"   + station_rpt[3].hex() + "," 
-        #                 +   "Tag_mac:"     + station_rpt[4].hex() + "," 
-        #                 +   "Frame_control:"      + station_rpt[5].hex() + "," 
-        #                 +   "Sequence:"     + station_rpt[6].hex() + ","   
-        #                 +   "Data rate:"    + station_rpt[7].hex() + ","  
-        #                 +   "Tx_power:"     + station_rpt[8].hex() + ","   
-        #                 +   "Channel:"      + station_rpt[9].hex() + ","   
-        #                 +   "Battery:"      + station_rpt[10].hex()+ ","
-        #                 +   "Reserved:"     + station_rpt[11].hex() + "\n")                       
-        #                 file.write(output)                           
-        #                 print(station_rpt_json)                                                                       
-        #             offset += size
-
-        #     if(message_type == "AR_STATION_REPORT"):
-        #         # print ("Received AR_STATION_REPORT")
-        #         station_rpt = parse_stationreport(message[1])
-        #         station_rpt_json = {
-        #             "ap_mac"        : station_rpt[0].hex(),
-        #             "noise_floor"   : station_rpt[1].hex(),
-        #             "data_rate"     : station_rpt[2].hex(),
-        #             "channel"       : station_rpt[3].hex(),
-        #             "rssi"          : station_rpt[4].hex(),
-        #             "type"          : station_rpt[5].hex(),
-        #             "associated"    : station_rpt[6].hex(),
-        #             "radio_bssid"   : station_rpt[7].hex(),   
-        #             "mon_bssid"     : station_rpt[8].hex(), 
-        #             "age"           : station_rpt[9].hex(),   
-        #         }
-        #         output = ("AR_STATION_REPORT - ap_mac:" + station_rpt[0].hex() + ","  
-        #         +   "noise_floor:"   + station_rpt[1].hex() + "," 
-        #         +   "data_rate:"     + station_rpt[2].hex() + ","
-        #         +   "channel:"       + station_rpt[3].hex() + ","
-        #         +   "rssi:"          + station_rpt[4].hex() + ","
-        #         +   "type:"          + station_rpt[5].hex() + ","
-        #         +   "associated:"    + station_rpt[6].hex() + ","
-        #         +   "radio_bssid:"   + station_rpt[7].hex() + ","
-        #         +   "mon_bssid:"     + station_rpt[8].hex() + ","
-        #         +   "age:"           + station_rpt[9].hex() + "\n")                    
-        #         file.write(output)                 
-        #         print(station_rpt_json)                
-        #         # print ("Sent AR_STATION_REPORT")      
         
-        #     if(message_type == "AR_STATION_EX_REPORT"):
-        #         #print ("Received AR_STATION_EX_REPORT")
-        #         station_rpt = parse_station_ex_report(message[1])
-        #         station_rpt_json = {
-        #             "ap_mac"        : station_rpt[0].hex(),
-        #             "BSSID"         : station_rpt[1].hex(),
-        #             "ESSID"         : station_rpt[2].hex(),
-        #             "channel"       : station_rpt[3].hex(),
-        #             "Phy_type"      : station_rpt[4].hex(),
-        #             "RSSI"          : station_rpt[5].hex(),
-        #             "Duration"      : station_rpt[6].hex(),
-        #             "Num_packets"   : station_rpt[7].hex(),   
-        #             "Noise_floor"   : station_rpt[8].hex(), 
-        #             "Classification": station_rpt[9].hex(),  
-        #             "Reserved"      : station_rpt[10].hex(),  
-        #         }
-        #         output = ("AR_STATION_EX_REPORT - ap_mac:" + station_rpt[0].hex() + ","  
-        #         +    "BSSID:"        + station_rpt[1].hex() + "," 
-        #         +    "ESSID:"        + station_rpt[2].hex() + "," 
-        #         +   "channel:"       + station_rpt[3].hex() + "," 
-        #         +   "Phy_type:"      + station_rpt[4].hex() + "," 
-        #         +   "RSSI:"          + station_rpt[5].hex() + "," 
-        #         +   "Duration:"      + station_rpt[6].hex() + "," 
-        #         +   "Num_packets:"   + station_rpt[7].hex() + ","   
-        #         +   "Noise_floor:"   + station_rpt[8].hex() + ","  
-        #         +   "Classification:"+ station_rpt[9].hex() + ","   
-        #         +   "Reserved:"      + station_rpt[10].hex(), + "\n")                       
-        #         file.write(output)                 
-        #         print(station_rpt_json) 
-
-        # else:
-        #     # DO NOTHING
-        #     pass
-        
-        #file.close()
 
 
 if __name__ == "__main__":
