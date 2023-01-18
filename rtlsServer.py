@@ -4,6 +4,10 @@ import json
 import sys
 import hmac
 from time import sleep
+import requests
+from urllib3.exceptions import InsecureRequestWarning
+from urllib3 import disable_warnings
+disable_warnings(InsecureRequestWarning)
 
 key_val = "abcxyz"
 
@@ -243,7 +247,7 @@ def process_rvd_data(stream):
                     station_rpt_json = {
                         "message_type"  : msg_type,
                         "data"          : {
-                                            "ap_mac"        : station_rpt[0].hex(),
+                                            "mac"        : station_rpt[0].hex(),
                                             "noise_floor"   : station_rpt[1].hex(),
                                             "data_rate"     : station_rpt[2].hex(),
                                             "channel"       : station_rpt[3].hex(),
@@ -263,7 +267,7 @@ def process_rvd_data(stream):
                     station_rpt_json = {
                         "message_type"  : msg_type,
                         "data"          : {
-                                            "ap_mac"        : station_rpt[0].hex(),
+                                            "mac"        : station_rpt[0].hex(),
                                             "BSSID"         : station_rpt[1].hex(),
                                             "ESSID"         : station_rpt[2].hex(),
                                             "channel"       : station_rpt[3].hex(),
@@ -331,7 +335,7 @@ def process_rvd_data(stream):
         if(message_type == "AR_STATION_REPORT"):
             station_rpt = parse_stationreport(message[1])
             station_rpt_json = {
-                "ap_mac"        : station_rpt[0].hex(),
+                "mac"        : station_rpt[0].hex(),
                 "noise_floor"   : station_rpt[1].hex(),
                 "data_rate"     : station_rpt[2].hex(),
                 "channel"       : station_rpt[3].hex(),
@@ -347,7 +351,7 @@ def process_rvd_data(stream):
         if(message_type == "AR_STATION_EX_REPORT"):
             station_rpt = parse_station_ex_report(message[1])
             station_rpt_json = {
-                "ap_mac"        : station_rpt[0].hex(),
+                "mac"        : station_rpt[0].hex(),
                 "BSSID"         : station_rpt[1].hex(),
                 "ESSID"         : station_rpt[2].hex(),
                 "channel"       : station_rpt[3].hex(),
@@ -365,17 +369,32 @@ def process_rvd_data(stream):
         # DO NOTHING
         return None, None
         
-def save_to_file(msg_type, rvd_data_json):
+def save_to_file(stream, msg_type, rvd_data_json):
     try:
+        AP_IPAddress = str(stream.client_address).replace("'","").replace("(","").replace(")","")
+        save_json = {
+            "AP_IPAddress" : AP_IPAddress[:-6],
+            "Message_Type" : msg_type,
+            "RTLS_Payload" : rvd_data_json,
+        }
         with open('Data.txt', '+a') as outfile:
-            json.dump(rvd_data_json, outfile)
+            #outfile.write(str(stream.client_address))
+            json.dump(save_json, outfile)
             outfile.write("\n")                       
     except:
         # Do nothing
         return
 
-def save_to_server(msg_type, rvd_data_json):
+def save_to_server(stream, msg_type, rvd_data_json):
     # Insert code here
+    header = { 'Content-Type' :  'application/json; charset=utf-8' }  
+    AP_IPAddress = str(stream.client_address).replace("'","").replace("(","").replace(")","")
+    save_json = {
+        "AP_IPAddress" : AP_IPAddress[:-6],
+        "Message_Type" : msg_type,
+        "RTLS_Payload" : rvd_data_json,
+    }
+    req = requests.post("https://eola59kp35fsk7o.m.pipedream.net", json=save_json, headers=header, verify=False)
     pass
 
 class MyUDPHandler(socketserver.BaseRequestHandler):
@@ -391,9 +410,9 @@ class MyUDPHandler(socketserver.BaseRequestHandler):
         print(msg_type)
         print(json.dumps(rvd_data_json,indent=1))
 
-        save_to_file(msg_type, rvd_data_json)
+        save_to_file(self, msg_type, rvd_data_json)
 
-        save_to_server(msg_type, rvd_data_json)
+        save_to_server(self, msg_type, rvd_data_json)
 
         
 
@@ -403,8 +422,8 @@ if __name__ == "__main__":
     print("Press Ctrl-C to terminate service.")    
     print("RTLS server up and listening to data...")    
 
-    HOST, PORT = "localhost", 5000
-    # HOST, PORT = "192.168.14.28", 5000
+    #HOST, PORT = "localhost", 5000
+    HOST, PORT = "192.168.14.28", 5000
 
     with socketserver.UDPServer((HOST, PORT), MyUDPHandler) as server:
         try:
