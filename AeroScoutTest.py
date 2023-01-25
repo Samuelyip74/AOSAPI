@@ -12,14 +12,14 @@ Code = "D0"
 Subcode = "01"
 Length = "18"                   # Length of Payload
 mac = "ffffffffffff"            # 6 bytes - MAC of AP
+reserved_1 = "00000000000000000000" # 10 bytes reserved
 dilution_factor = "00000032"    # 4 bytes - 50 measurements
 timeout = "0005"                # 2 bytes - 5 seconds
-payload = mac+dilution_factor+timeout
+reserved_2 = "0000"
+payload = mac+reserved_1+dilution_factor+timeout+reserved_2
 
 print("Sending...")
 set_client_mode_start      = bytes.fromhex(Code+Subcode+Length+payload)
-
-
 bytesToSend         = set_client_mode_start
 
 # serverAddressPort   = (IPAddr, 5000)
