@@ -11,7 +11,9 @@ IPAddr = socket.gethostbyname(hostname)
 Code = "D0"
 Subcode = "01"
 Length = "18"                   # Length of Payload
-mac = "ffffffffffff"            # 6 bytes - MAC of AP
+# 34:e7:0b:03:d1:60
+mac = "34e70b03d160"            # 6 bytes - MAC of AP
+#mac = "ffffffffffff"            # 6 bytes - MAC of AP
 reserved_1 = "00000000000000000000" # 10 bytes reserved
 dilution_factor = "00000032"    # 4 bytes - 50 measurements
 timeout = "0005"                # 2 bytes - 5 seconds
@@ -23,8 +25,8 @@ set_client_mode_start      = bytes.fromhex(Code+Subcode+Length+payload)
 bytesToSend         = set_client_mode_start
 
 # serverAddressPort   = (IPAddr, 5000)
-serverAddressPort   = ('127.0.0.1', 5000)
-# serverAddressPort   = ('192.168.14.28', 5000)
+# serverAddressPort   = ('127.0.0.1', 5000)
+serverAddressPort   = ('192.168.13.1', 1144)
 
 bufferSize          = 1024
 # Create a UDP socket at client side
